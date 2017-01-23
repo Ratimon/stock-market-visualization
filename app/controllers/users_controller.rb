@@ -33,8 +33,13 @@ class UsersController < ApplicationController
     redirect_to root_path
   end
 
+  def my_portfolio
+    @user_stocks = @current_user.stocks
+    @user = @current_user
+  end
+
   private
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation , :avatar)
+    params.require(:user).permit(:email, :password, :password_confirmation , :avatar, :admin)
   end
 end

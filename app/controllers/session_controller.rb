@@ -1,5 +1,6 @@
 class SessionController < ApplicationController
    def new
+    #  raise 'hellp'
    # This is the action for user login. The view will have the login form template.
    end
 
@@ -10,7 +11,7 @@ class SessionController < ApplicationController
        # If a user record with the entered in the form is present AND the user is authenticated (using bcrypt's authenticate method and the password entered in the form), store their id in the session hash and redirect them to the root path.
        session[:user_id] = user.id
        flash[:notice] = "User created!"
-       redirect_to root_path
+       redirect_to my_portfolio_path
      else
        # If the user cannot be authenticated, redirect them to the login_path.
        flash[:error] = "Invalid email or password"
@@ -20,6 +21,7 @@ class SessionController < ApplicationController
 
    # This is the action to which the user sign-out delete request is posted.
    def destroy
+    #  raise 'hell'
      session[:user_id] = nil
      redirect_to root_path
    end

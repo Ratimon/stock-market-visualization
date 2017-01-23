@@ -1,0 +1,28 @@
+<div id="stock-lookup">
+  <h3>Search for Stocks</h3>
+  <%= form_tag search_stocks_path, remote: true, method: :get, id: 'stock-lookup-form' do %>
+  <div>
+    <div>
+      <%= text_field_tag :stock, params[:stock], placeholder: 'Stock Ticker Symbol', autofocus: true, class: 'form-control' %>
+    </div>
+  <div>
+    <%= button_tag(type: :submit) do %>
+      <i class='search'></i> Look up a stock
+    <% end %>
+  </div>
+ </div>
+ <% end %>
+
+ <% if @stock %>
+   <div id="stock-lookup-results"ß>
+     <h2>Symbol:</h2> <%= @stock.ticker %>
+     <h2>Name:</h2> <%= @stock.name %>
+     <h2>Price:</h2> <%= @stock.price %>
+     <h2><%= link_to "Add to my Portfolio", user_stocks_path(user: @current_user, user_stock: {stock_ticker: @stock.ticker, stock_id: @stock.id ? @stock.id : ''}), method: :post %></h2>
+   </div>
+
+ <% end %>
+
+ <div id="stock-lookup-errors"></div>
+
+</div>
