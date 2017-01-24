@@ -14,11 +14,14 @@
   <tbody>
     <% @user_stocks.each do |user_stock| %>
       <tr>
-        <td><%= user_stock.user_id %></td>
-        <td><%= user_stock.stock_id %></td>
-        <td><%= link_to 'Show', user_stock %></td>
-        <td><%= link_to 'Edit', edit_user_stock_path(user_stock) %></td>
-        <td><%= link_to 'Destroy', user_stock, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= user_stock.name %></td>
+        <td><%= user_stock.ticker %></td>
+        <td><%= user_stock.price %></td>
+        <% if @user.id == current_user.id %>
+          <td>
+            <%= link_to 'Delete', user_stock_path(user_stock), :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-xs btn-danger' %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

@@ -1,6 +1,7 @@
 class UserStocksController < ApplicationController
   before_action :set_user_stock, only: [:show, :edit, :update, :destroy]
 
+
   # GET /user_stocks
   # GET /user_stocks.json
   def index
@@ -24,30 +25,23 @@ class UserStocksController < ApplicationController
   # POST /user_stocks
   # POST /user_stocks.json
   def create
-    # @user_stock = UserStock.new(user_stock_params)
-    raise 'hell'
 
-    user_stock = UserStock.create user_stock_params #(stock_id: params[:stock_id], user: current_user)
-    redirect_to my_portfolio_path
-
-    # if params[:stock_id].present?
-    #   @user_stock = UserStock.new(stock_id: params[:stock_id], user: current_user)
-    # else
-    #   stock = Stock.find_by_ticker(params[:stock_ticker])
-    #   if stock
-    #     @user_stock = UserStock.new(user: @current_user, stock: stock)
-    #   else
-    #     stock = Stock.new_from_lookup(params[:stock_ticker])
-    #     if stock.save
-    #       @user_stock = UserStock.new(user: @current_user, stock: stock)
-    #     else
-    #       @user_stock = nil
-    #       flash[:error] = "Stock is not available"
-    #     end
-    #   end
+    if params[:stock_id].present?
+      @user_stock = UserStock.new(stock_id: params[:stock_id], user: @current_user)
+    else
+      stock = Stock.find_by_ticker(params[:stock_ticker])
+      if stock
+        @user_stock = UserStock.new(user: @current_user, stock: stock)
+      else
+        stock = Stock.new_from_lookup(params[:stock_ticker])
+        if stock.save
+          @user_stock = UserStock.new(user: @current_user, stock: stock)
+        else
+          @user_stock = nil
+          flash[:error] = "Stock is not available"
+        end
+      end
     end
-
-
 
     respond_to do |format|
       if @user_stock.save
@@ -58,6 +52,7 @@ class UserStocksController < ApplicationController
         format.json { render json: @user_stock.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PATCH/PUT /user_stocks/1
@@ -77,9 +72,9 @@ class UserStocksController < ApplicationController
   # DELETE /user_stocks/1
   # DELETE /user_stocks/1.json
   def destroy
-    @user_stock.destroy
+    @user_stock.destroy if @user_stock.present?
     respond_to do |format|
-      format.html { redirect_to user_stocks_url, notice: 'User stock was successfully destroyed.' }
+      format.html { redirect_to my_portfolio_path, notice: 'Stock was successfully removed from portfolio.' }
       format.json { head :no_content }
     end
   end
@@ -87,7 +82,10 @@ class UserStocksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_stock
-      @user_stock = UserStock.find(params[:id])
+      # raise params.inspect
+      # @user_stock = UserStock.find(params[:id])
+      # raise params.inspect
+      @user_stock = UserStock.find_by(user_id: @current_user.id, stock_id: params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
