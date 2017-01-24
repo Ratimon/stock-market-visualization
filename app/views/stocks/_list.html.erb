@@ -15,12 +15,14 @@
   </thead>
   <tbody>
     <% @stocks.each do |user_stock| %>
-      <tr>
+      <tr class = <%= user_stock.ticker %> >
         <td><%= user_stock.name %></td>
         <td><%= user_stock.ticker %></td>
-        <td><%= user_stock.price %></td>
-        <td class="lastTradeTime"></td>
+        <td class="closed_price"></td>
+        <td class="last_trade_time"></td>
         <td class="current_price"></td>
+        <td class="change"></td>
+        <td class="volume"></td>
         <% if @user.id == @current_user.id %>
           <td><%= link_to 'Delete', user_stock_path(user_stock), :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-xs btn-danger' %></td>
         <% end %>
