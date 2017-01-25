@@ -1,4 +1,47 @@
 
+  <h1>Socket.io</h1>
+  <div class="test"></div>
+  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+  <script>
+  var socket = io.connect('http://localhost:8080');
+
+  $( document ).ready(function() {
+
+    var arr_store = $('tbody tr').map(function(){
+      return $(this).attr('class')
+    }).get();
+
+    if(arr_store === undefined){
+      debugger;
+      arr_store = [$('tbody tr').attr('class')];
+    }
+
+    var sendObj = {  "arr_store" : arr_store }
+    var sendStr = JSON.stringify(sendObj)
+
+
+    //start it all off
+    socket.emit('stock_update_request', sendStr);
+    socket.on('update_stock', (data) => {
+      var results = JSON.parse(data)
+      console.log(results)
+
+
+      for (var i = 0; i < results.length; i++) {
+
+
+
+        
+          $('.test').append('<p>'+results[i].symbol+' Ask: '+results[i].ask+' Bid: '+results[i].bid+'</p>')
+      }
+
+      setTimeout(() => socket.emit('stock_update_request', sendStr), 5000);
+    });
+  });
+  </script>
+
+
+
 <%= render 'stocks/lookup' %>
 
 <%= render 'stocks/list' %>

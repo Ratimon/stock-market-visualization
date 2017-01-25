@@ -7,7 +7,7 @@
       return;
     }
 
-    var checkStocks = function(){
+    checkStocks = function(){
       console.log('checkStocks()');
       var arr = $('tbody tr').map(function(){
         // debugger
@@ -15,18 +15,8 @@
       }).get();
 
       var url = "//query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol IN ('"+arr.join("','") +"')&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=quote"
-      // var url_single_stock   = "//query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol IN ('"+arr.join("','")+"')&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=quote"
-      //
-      // if (arr.length == 1) {
-      //   var url_for_stock = url_single_stock;
-      //   var stock_code_class = '.' + arr;
-      // } else {
-      //   var url_for_stock = url_multiple_stocks;
-      //   var stock_code_class = '.' + arr[i];
-      // }
 
       console.log('call ajax', url);
-
       $.ajax({
         url: url,
         dataType: "jsonp",
@@ -37,9 +27,10 @@
     quote = function(data) {
       // debugger;
         console.log('quote', data);
-
         var results = data.query.results.quote;
-
+        // If the quote is not an array, we'll use the whole object.
+        // !storeObj
+        // debugger;
         if(results.length === undefined){
           var temp = results;
           results = [temp];
@@ -50,9 +41,7 @@
           var stock_code_class = '.' + results[i].symbol;
           var storeObj = results[i]
 
-          // console.log('stock_code_class', stock_code_class);
-          // If the quote is not an array, we'll use the whole object.
-          // !storeObj
+
 
           var lastTradePrice = storeObj.LastTradePriceOnly
           var price_change = storeObj.Change
@@ -76,7 +65,27 @@
       };
   };
 
-  checkStocks();
-  setTimeout(checkStocks, 5000);
+  // function mytimeout() {
+  //   setTimeout(function () {
+  //     checkStocks()
+  //     mytimeout();
+  //   }, 5000);
+  // }
+ setInterval( function(){ checkStocks(); }, 5000)
+  // checkStocks(); // always
+
+
+
+
+// var utc_offset_ny = -16;
+// var now   = new Date(new Date().getTime() + (utc_offset_ny) * 3600 * 1000)
+// var open  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9,0,0 )
+// var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,0,0 )
+// if( now.getTime() > open.getTime() && now.getTime() < close.getTime() ) {
+  // start stock Checker ONLY if nasdaq is open
+  // mytimeout();
+// }
+
+
 
   });
