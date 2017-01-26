@@ -1,4 +1,184 @@
 
-<%= render 'stocks/lookup' %>
+  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+  <script>
+  var socket = io.connect('http://localhost:8080');
 
+  $( document ).ready(function() {
+
+    if( $('body.users.my_portfolio').length === 0 ){
+      return;
+    }
+
+    var arr_store = $('tbody tr').map(function(){
+      return $(this).attr('class')
+    }).get();
+
+    if(arr_store === undefined){
+      // debugger;
+      arr_store = [$('tbody tr').attr('class')];
+    }
+
+    var sendObj = {  "arr_store" : arr_store }
+    var sendStr = JSON.stringify(sendObj)
+
+    var utc_offset_ny = -16;
+    var now   = new Date(new Date().getTime() + (utc_offset_ny) * 3600 * 1000)
+    var open  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9,15,0 )
+    var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,15,0 )
+    if( now.getTime() > open.getTime() && now.getTime() < close.getTime() ) {
+      socket.emit('stock_update_request', sendStr);
+    }
+
+    //start it all off
+    socket.on('update_stock', (data) => {
+      var results = JSON.parse(data)
+      console.log(results)
+
+
+      for (var i = 0; i < results.length; i++) {
+
+        var stock_code_class = '.' + results[i].symbol;
+        var storeObj = results[i]
+
+        var lastTradePrice = storeObj.lastTradePriceOnly
+        var closed_price =   $(stock_code_class).find('.closed_price').text()
+        var price_change = storeObj.change || parseFloat(Math.round((lastTradePrice - closed_price)* 100) / 100).toFixed(2);
+        var currentdate = new Date(storeObj.lastTradeDate);
+        var month = new Array(12);
+
+        $(stock_code_class).find('.last_trade_time').text((currentdate.getUTCMonth()+1)+"/"+currentdate.getUTCDate()+"/"+currentdate.getUTCFullYear()+" at "+storeObj.lastTradeTime)
+        $(stock_code_class).find('.current_price').text(lastTradePrice)
+        $(stock_code_class).find('.change').text(price_change)
+        $(stock_code_class).find('.volume').text(storeObj.volume)
+
+        if (price_change > 0 ) {
+            $(stock_code_class).find('.change').addClass("priceup") ;
+        } else if (price_change < 0 ) {
+            $(stock_code_class).find('.change').addClass("pricedown") ;
+        } else {
+            $(stock_code_class).find('.change').text('No Change')  ;
+        }
+      }
+///////////////////
+  if ( $( "svg" ).length ) {
+      $( "svg" ).remove();
+  }
+
+  var jsonBarSymbol = results.map(function(a) {return a.symbol;});
+  var jsonBarChange = results.map(function(b) {return b.changeInPercent;});
+
+
+
+  function JsonBarSingle(a, b) {
+    this.StockTicker = a;
+    this.Change = b;
+  }
+
+  var jsonBar = [];
+  for (var i = 0; i < jsonBarSymbol.length; i++) {
+    // debugger;
+    var jsonBarSingle = new JsonBarSingle(jsonBarSymbol[i], jsonBarChange[i]);
+    jsonBar.push(jsonBarSingle)
+  }
+
+
+// var jsonBar = [
+//         { "StockTicker": "A", "Change": 26 },
+//         { "StockTicker": "B", "Change": 12 },
+//         { "StockTicker": "C", "Change": -17 },
+//         { "StockTicker": "D", "Change": 6 },
+//         { "StockTicker": "E", "Change": 4 }
+//     ];
+
+
+          var svgWidth = 575;
+          var svgHeight = 400;
+          var padding = 15
+
+           var svg = d3.select(".span10")
+               .append("svg")
+               .attr("width", svgWidth)
+               .attr("height", svgHeight)
+               .append("g")
+               .attr("transform", "translate(" +70 + "," + 0 + ")");
+
+
+          //Set up scales
+          var xScale = d3.scale.ordinal()
+               .domain(jsonBar.map(function(d) { return d.StockTicker; }))
+              //  .rangeRoundBands([0, svgWidth], .1);
+               .rangeRoundBands([padding, padding+svgHeight], .1);
+
+          var yScale = d3.scale.linear()
+              //  .domain([-100, 100])
+               .domain(d3.extent(jsonBar, function(d) { return d.Change; }))
+               .range([svgWidth+padding, padding]);
+
+
+          // Create bars
+           svg.selectAll("rect")
+               .data(jsonBar)
+               .enter().append("rect")
+               .attr("x", function (d) { return xScale(d.StockTicker) ; })
+               .attr("y", function (d) { return yScale(Math.max(0, d.Change)); })
+               .attr("height", function (d) { return Math.abs(yScale(d.Change) - yScale(0)); })
+               .attr("width", xScale.rangeBand())
+              //  .attr("width", (svgWidth / jsonBar.length)-padding)
+
+               .attr("fill", function (d) {
+                            if (d.Change === 0) {return "#959595"}
+                            else if (d.Change > 0) {return "green"}
+                            else {return "red"}
+                      });
+
+            //To format axis as a percent
+            var formatPercent = d3.format(",.2%");
+
+            //Create x axis
+            var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom");
+
+            svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0,0)")
+            .call(xAxis);
+
+            //Create y axis
+            var yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("left")
+            .ticks(20).tickFormat(formatPercent);
+
+            svg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(0,0)")
+            .call(yAxis);
+
+            //fixing by swich heigth and width elements
+            $('g').css({"width": svgWidth, "Height": svgHeight})
+
+///////////////////
+      //rewrite this code again since  we want to update the data before sending again
+      var arr_store = $('tbody tr').map(function(){
+        return $(this).attr('class')
+      }).get();
+
+      if(arr_store === undefined){
+        // debugger;
+        arr_store = [$('tbody tr').attr('class')];
+      }
+
+      var sendObj = {  "arr_store" : arr_store }
+      var sendStr = JSON.stringify(sendObj)
+
+      setTimeout(() => socket.emit('stock_update_request', sendStr), 6000);
+    });
+  });
+  </script>
+
+
+
+<%= render 'stocks/lookup' %>
+<%= render 'stocks/graph' %>
 <%= render 'stocks/list' %>

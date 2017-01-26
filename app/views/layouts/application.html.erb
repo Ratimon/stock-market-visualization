@@ -4,12 +4,14 @@
   <title>Project10StockMarketWatcher</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
+  <!-- <%= cloudinary_js_config %> -->
+
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= params[:controller]%> <%= params[:action]%>">
-
-  <nav>
-    <%= link_to "Home", root_path %>
+  <%= render 'layouts/navigation' %>
+  <!-- <nav>
+    <%= link_to "Stock Visualization", root_path %>
     <% if @current_user.present? %>
       <% if @current_user.admin? %>
         <%= link_to "All users", users_path %>
@@ -21,9 +23,11 @@
       <%= link_to "Sign up", new_user_path %>
       <%= link_to "Sign in", login_path %>
     <% end %>
-  </nav>
+  </nav> -->
 
-<%= yield %>
-
+<div class="container" id="main">
+  <%= yield %>
+</div>
+<%= render 'layouts/footer' %>
 </body>
 </html>
