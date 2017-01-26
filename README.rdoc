@@ -3,23 +3,25 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
-Things you may want to cover:
+Technology
+----------------
+*Html*
+*css*
+*RubyonRails*
+*PostgresSql*
+*Node.js*
+*Express.js*
+*socket.io*
+*D3.js*
+*bootstrap*
+Requirement
+---------------
+-Authentication- user can log in log out
+-Associative database- Users can track stocks
+-Realtime Stock visualisation
+-The app display the real time stock price and its
+-responsive
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
 
 * ...
 
