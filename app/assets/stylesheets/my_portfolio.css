@@ -10,18 +10,6 @@ rect:hover {
   opacity :0.5;
 }
 
-/*div.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 100px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: #008AB8;
-    border: 0px;
-    border-radius: 6px;
-    pointer-events: none;
-  }*/
 
 .span10 {
   text-align: center;

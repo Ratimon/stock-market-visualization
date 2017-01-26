@@ -10,20 +10,7 @@
 </head>
 <body class="<%= params[:controller]%> <%= params[:action]%>">
   <%= render 'layouts/navigation' %>
-  <!-- <nav>
-    <%= link_to "Stock Visualization", root_path %>
-    <% if @current_user.present? %>
-      <% if @current_user.admin? %>
-        <%= link_to "All users", users_path %>
-      <% end %>
-      <%= link_to "My Portfolio" , my_portfolio_path %>
-      <%= link_to "Edit profile", users_edit_path %>
-      <%= link_to "Logout #{ @current_user.email }", login_path, :method => 'delete' %>
-    <% else %>
-      <%= link_to "Sign up", new_user_path %>
-      <%= link_to "Sign in", login_path %>
-    <% end %>
-  </nav> -->
+
 
 <div class="container" id="main">
   <%= yield %>
