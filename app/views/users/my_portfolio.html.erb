@@ -1,7 +1,8 @@
-
-  <script src="//fathomless-ridge-45956.herokuapp.com/socket.io/socket.io.js"></script>
+ <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+ <!-- <script src="//fathomless-ridge-45956.herokuapp.com/socket.io/socket.io.js"></script> -->
   <script>
-  var socket = io.connect('https://fathomless-ridge-45956.herokuapp.com');
+  var socket = io.connect('http://localhost:8080');
+  // var socket = io.connect('https://fathomless-ridge-45956.herokuapp.com');
 
   $( document ).ready(function() {
 
@@ -26,12 +27,19 @@
     var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,15,0 )
     if( now.getTime() > open.getTime() && now.getTime() < close.getTime() ) {
       socket.emit('stock_update_request', sendStr);
+    } else {
+      $('#main').append('<h3 class="addclose" >The stock is closed now, so  no real-time feature</h1>')
     }
 
     //start it all off
     socket.on('update_stock', (data) => {
       var results = JSON.parse(data)
       console.log(results)
+
+
+  //     socket.on('disconnect', () => {
+  //
+  // });
 
 
       for (var i = 0; i < results.length; i++) {
@@ -59,109 +67,118 @@
         }
       }
 ///////////////////
+//remove old graph before creating the new one
   if ( $( "svg" ).length ) {
       $( "svg" ).remove();
   }
  // debugger
-  var jsonBarSymbol = results.map(function(a) {return a.symbol;});
-  var jsonBarChange = results.map(function(b) {return b.changeInPercent;});
+ if ( $( '.addone' ).length ) {
+   $( '.addone' ).remove();
+ }
+
+  if ((results.length === 1)) {
+    $('#main').append('<h1 class="addone" >Please add one more stock to compare them by real-time bar chart</h1>')
+  } else {
 
 
-  // if(jsonBarSymbol === undefined || jsonBarChange === undefined){
-  //
-  //   var jsonBarSymbol = [results
-  //   var jsonBarChange = [results]
-  // }
+          $( '.addone' ).remove();
+          var jsonBarSymbol = results.map(function(a) {return a.symbol;});
+          var jsonBarChange = results.map(function(b) {return b.changeInPercent;});
 
 
-  function JsonBarSingle(a, b) {
-    this.StockTicker = a;
-    this.Change = b;
-  }
+          function JsonBarSingle(a, b) {
+            this.StockTicker = a;
+            this.Change = b;
+          }
 
 
-  var jsonBar = [];
-  for (var i = 0; i < jsonBarSymbol.length; i++) {
-    // debugger;
-    var jsonBarSingle = new JsonBarSingle(jsonBarSymbol[i], jsonBarChange[i]);
-    jsonBar.push(jsonBarSingle)
-  }
+          var jsonBar = [];
+          for (var i = 0; i < jsonBarSymbol.length; i++) {
+            var jsonBarSingle = new JsonBarSingle(jsonBarSymbol[i], jsonBarChange[i]);
+            jsonBar.push(jsonBarSingle)
+          }
 
-//Json Template
-// var jsonBar = [
-//         { "StockTicker": "A", "Change": 26 },
-//         { "StockTicker": "B", "Change": 12 },
-//         { "StockTicker": "C", "Change": -17 },
-//         { "StockTicker": "D", "Change": 6 },
-//         { "StockTicker": "E", "Change": 4 }
-//     ];
+        //Json Template
+        // var jsonBar = [
+        //         { "StockTicker": "A", "Change": 26 },
+        //         { "StockTicker": "B", "Change": 12 },
+        //         { "StockTicker": "C", "Change": -17 },
+        //         { "StockTicker": "D", "Change": 6 },
+        //         { "StockTicker": "E", "Change": 4 }
+        //     ];
 
-
-          var svgWidth = 575;
-          var svgHeight = 400;
-          var padding = 15
-
-           var svg = d3.select(".span10")
-               .append("svg")
-               .attr("width", svgWidth)
-               .attr("height", svgHeight)
-               .append("g")
-               .attr("transform", "translate(" +70 + "," + 0 + ")");
+        var eachWidth = 80
+        var svgWidth = (eachWidth * jsonBar.length)
+        var svgHeight = svgWidth
+        var padding = 10
 
 
-          //Set up scales
-          var xScale = d3.scale.ordinal()
-               .domain(jsonBar.map(function(d) { return d.StockTicker; }))
-               .rangeRoundBands([padding, padding+svgHeight], .1);
 
-          var yScale = d3.scale.linear()
-              //  .domain([-100, 100])
-               .domain(d3.extent(jsonBar, function(d) { return d.Change; }))
-               .range([svgWidth+padding, padding]);
+         var svg = d3.select(".span10")
+             .append("svg")
+             .attr("width", svgWidth+60)
+             .attr("height", svgHeight+25)
+             .append("g")
+             .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
 
-          // Create bars
-           svg.selectAll("rect")
-               .data(jsonBar)
-               .enter().append("rect")
-               .attr("x", function (d) { return xScale(d.StockTicker) ; })
-               .attr("y", function (d) { return yScale(Math.max(0, d.Change)); })
-               .attr("height", function (d) { return Math.abs(yScale(d.Change) - yScale(0)); })
-               .attr("width", xScale.rangeBand())
+        //Set up scales
+        var xScale = d3.scale.ordinal()
+             .domain(jsonBar.map(function(d) { return d.StockTicker; }))
+             .rangeRoundBands([padding, padding+svgHeight], .1);
 
-               .attr("fill", function (d) {
-                            if (d.Change === 0) {return "#959595"}
-                            else if (d.Change > 0) {return "green"}
-                            else {return "red"}
-                      });
+        var yScale = d3.scale.linear()
+            //  .domain([-100, 100])
+             .domain(d3.extent(jsonBar, function(d) { return d.Change; }))
+             .range([svgWidth+padding, padding]);
 
-            //To format axis as a percent
-            var formatPercent = d3.format(",.2%");
 
-            //Create x axis
-            var xAxis = d3.svg.axis()
-            .scale(xScale)
-            .orient("bottom");
+        // Create bars
+         svg.selectAll("rect")
+             .data(jsonBar)
+             .enter().append("rect")
+             .attr("x", function (d) { return xScale(d.StockTicker) ; })
+             .attr("y", function (d) { return yScale(Math.max(0, d.Change)); })
+             .attr("height", function (d) { return Math.abs(yScale(d.Change) - yScale(0)); })
+             .attr("width", xScale.rangeBand())
 
-            svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0,0)")
-            .call(xAxis);
+             .attr("fill", function (d) {
+                          if (d.Change === 0) {return "#959595"}
+                          else if (d.Change > 0) {return "green"}
+                          else {return "red"}
+                    });
 
-            //Create y axis
-            var yAxis = d3.svg.axis()
-            .scale(yScale)
-            .orient("left")
-            .ticks(20).tickFormat(formatPercent);
+          //To format axis as a percent
+          var formatPercent = d3.format(",.2%");
 
-            svg.append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(0,0)")
-            .call(yAxis);
+          //Create x axis
+          var xAxis = d3.svg.axis()
+          .scale(xScale)
+          .orient("bottom");
 
-            //fixing by swich heigth and width elements
-            $('g').css({"width": svgWidth, "Height": svgHeight})
+          svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0,0)")
+          .call(xAxis);
 
+          //Create y axis
+          if (results.length <= 3 ) {
+            var tickScale = 8
+          } else {
+            var tickScale = 20
+          }
+
+          var yAxis = d3.svg.axis()
+          .scale(yScale)
+          .orient("left")
+          .ticks(tickScale).tickFormat(formatPercent);
+
+          svg.append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(0,0)")
+          .call(yAxis);
+
+      }
 ///////////////////
       //rewrite this code again since  we want to update the data before sending again
       var arr_store = $('tbody tr').map(function(){
