@@ -30,3 +30,4 @@ Requirement
 -responsive
 
 Link to live website will come soon
+https://stock-visualization.herokuapp.com/my_portfolio
