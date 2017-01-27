@@ -14,7 +14,6 @@
     }).get();
 
     if(arr_store === undefined){
-      // debugger;
       arr_store = [$('tbody tr').attr('class')];
     }
 
@@ -81,7 +80,7 @@
     jsonBar.push(jsonBarSingle)
   }
 
-
+//Json Template
 // var jsonBar = [
 //         { "StockTicker": "A", "Change": 26 },
 //         { "StockTicker": "B", "Change": 12 },
@@ -106,7 +105,6 @@
           //Set up scales
           var xScale = d3.scale.ordinal()
                .domain(jsonBar.map(function(d) { return d.StockTicker; }))
-              //  .rangeRoundBands([0, svgWidth], .1);
                .rangeRoundBands([padding, padding+svgHeight], .1);
 
           var yScale = d3.scale.linear()
@@ -123,7 +121,6 @@
                .attr("y", function (d) { return yScale(Math.max(0, d.Change)); })
                .attr("height", function (d) { return Math.abs(yScale(d.Change) - yScale(0)); })
                .attr("width", xScale.rangeBand())
-              //  .attr("width", (svgWidth / jsonBar.length)-padding)
 
                .attr("fill", function (d) {
                             if (d.Change === 0) {return "#959595"}
@@ -165,7 +162,6 @@
       }).get();
 
       if(arr_store === undefined){
-        // debugger;
         arr_store = [$('tbody tr').attr('class')];
       }
 

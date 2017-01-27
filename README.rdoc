@@ -3,6 +3,7 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
+---------------
 Technology
 ----------------
 *Html*
@@ -10,10 +11,16 @@ Technology
 *RubyonRails*
 *PostgresSql*
 *Node.js*
-*Express.js*
-*socket.io*
+-*Express.js*
+*socket.io* or (ajax)
 *D3.js*
 *bootstrap*
+--------------
+Data Source
+---------------
+-Yahoo Finance API
+--gem
+-----------
 Requirement
 ---------------
 -Authentication- user can log in log out
@@ -22,9 +29,4 @@ Requirement
 -The app display the real time stock price and its
 -responsive
 
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Link to live website will come soon
