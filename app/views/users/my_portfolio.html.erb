@@ -1,7 +1,7 @@
 
-  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+  <script src="//fathomless-ridge-45956.herokuapp.com/socket.io/socket.io.js"></script>
   <script>
-  var socket = io.connect('http://localhost:8080');
+  var socket = io.connect('https://fathomless-ridge-45956.herokuapp.com');
 
   $( document ).ready(function() {
 
@@ -20,13 +20,13 @@
     var sendObj = {  "arr_store" : arr_store }
     var sendStr = JSON.stringify(sendObj)
 
-    var utc_offset_ny = -16;
-    var now   = new Date(new Date().getTime() + (utc_offset_ny) * 3600 * 1000)
-    var open  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9,15,0 )
-    var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,15,0 )
-    if( now.getTime() > open.getTime() && now.getTime() < close.getTime() ) {
+    // var utc_offset_ny = -16;
+    // var now   = new Date(new Date().getTime() + (utc_offset_ny) * 3600 * 1000)
+    // var open  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9,15,0 )
+    // var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,15,0 )
+    // if( now.getTime() > open.getTime() && now.getTime() < close.getTime() ) {
       socket.emit('stock_update_request', sendStr);
-    }
+    // }
 
     //start it all off
     socket.on('update_stock', (data) => {
@@ -55,23 +55,30 @@
         } else if (price_change < 0 ) {
             $(stock_code_class).find('.change').addClass("pricedown") ;
         } else {
-            $(stock_code_class).find('.change').text('No Change')  ;
+            $(stock_code_class).find('0change').text('No Change')  ;
         }
       }
 ///////////////////
   if ( $( "svg" ).length ) {
       $( "svg" ).remove();
   }
-
+ // debugger
   var jsonBarSymbol = results.map(function(a) {return a.symbol;});
   var jsonBarChange = results.map(function(b) {return b.changeInPercent;});
 
+
+  // if(jsonBarSymbol === undefined || jsonBarChange === undefined){
+  //
+  //   var jsonBarSymbol = [results
+  //   var jsonBarChange = [results]
+  // }
 
 
   function JsonBarSingle(a, b) {
     this.StockTicker = a;
     this.Change = b;
   }
+
 
   var jsonBar = [];
   for (var i = 0; i < jsonBarSymbol.length; i++) {

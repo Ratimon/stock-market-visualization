@@ -8,6 +8,7 @@
       return;
     }
 
+
     // var jsonData = [
     //         { "StockTicker": "A", "Change": 26 },
     //         { "StockTicker": "B", "Change": 12 },
@@ -154,14 +155,6 @@
 //
 //
 //
-// var utc_offset_ny = -16;
-// var now   = new Date(new Date().getTime() + (utc_offset_ny) * 3600 * 1000)
-// var open  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9,0,0 )
-// var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,0,0 )
-// if( now.getTime() > open.getTime() && now.getTime() < close.getTime() ) {
-//
-//
-//   mytimeout();
-// }
+
 
   });
