@@ -21,7 +21,10 @@
     var sendObj = {  "arr_store" : arr_store }
     var sendStr = JSON.stringify(sendObj)
 
-    var utc_offset_ny = -16;
+    var timeOffsetInHours = -(new Date()).getTimezoneOffset()/60
+    var offset_ny_from_utc = -5
+    var utc_offset_ny = offset_ny_from_utc - timeOffsetInHours
+    // var utc_offset_ny = -16;//from sydney Austalia
     var now   = new Date(new Date().getTime() + (utc_offset_ny) * 3600 * 1000)
     var open  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9,45,0 )
     var close = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16,15,0 )
