@@ -4,7 +4,8 @@ This README would normally document whatever steps are necessary to get the
 application up and running.
 
 == The Purpose
-  The goal of this project was to mix socket.io and D3.js <br /> - a websocket and a data visualization library that should work very well together.
+The goal of this project was to mix socket.io and D3.js
+a websocket and a data visualization library that should work very well together.
 
 == Technology
 1. HTML
@@ -21,7 +22,7 @@ application up and running.
 5. PostgresSql
 
 == Data Source
-   Yahoo Finance API and its gem
+Yahoo Finance API and its gem
 
 == Requirement
 1. Authentication
@@ -35,7 +36,9 @@ application up and running.
 4. Responsive
 
 == Constraint
-  The app is not still scaled since Yahoo finance API limit is 2_000 request per hour,<br /> but 1 user requires 600 requesrs per hour,<br /> so the number of maximum users per hour is only 3 people.
+The app is not still scaled since Yahoo finance API limit is 2_000 request per hour,
+but 1 user requires 600 requesrs per hour,
+so the number of maximum users per hour is only 3 people.
 
 ==Live Website
-  https://stock-visualization.herokuapp.com/
+https://stock-visualization.herokuapp.com/
