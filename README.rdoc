@@ -3,31 +3,40 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
----------------
-Technology
-----------------
-*Html*
-*css*
-*RubyonRails*
-*PostgresSql*
-*Node.js*
--*Express.js*
-*socket.io* or (ajax)
-*D3.js*
-*bootstrap*
---------------
-Data Source
----------------
--Yahoo Finance API
---gem
------------
-Requirement
----------------
--Authentication- user can log in log out
--Associative database- Users can track stocks
--Realtime Stock visualisation
--The app display the real time stock price and its
--responsive
 
-Link to live website will come soon
-https://stock-visualization.herokuapp.com/my_portfolio
+**The Purpose**
+The goal of this project was to mix socket.io and D3.js within one week - a websocket and a data visualization library that should work very well together.
+
+**Technology**
+*HTML
+*CSS
+  *Bootstrap
+*Javascript
+  *Node.js
+    *Express.js
+  *Jquery.js
+  *Socket.io
+  *D3.js
+*RubyonRails
+ *Rails4
+*PostgresSql
+
+**Data Source**
+*Yahoo Finance API and its gem
+
+**Requirement**
+*Authentication
+  *User can log in and log out.
+*Associative database (has_many :through between Stock and User Model)
+  *Users can track stocks.
+  *Users can't add the added stock to their portfolios
+  *Users add up to 10 stocks
+*Realtime Stock visualisation
+  *The app display the real time stock prices and their bar chart.
+*Responsive
+
+**Constraint**
+*The app is not still scaled since Yahoo finance API limit is 2_000 request per hour, but 1 user requires 600 requesrs per hour, so the number of maximum users per hour is only 3 people.
+
+**Live Website**
+*https://stock-visualization.herokuapp.com/
