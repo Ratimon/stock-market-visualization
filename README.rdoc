@@ -12,10 +12,11 @@ a websocket and a data visualization library that should work very well together
 2. CSS
    * Bootstrap
 3. Javascript
+   * AJAX
    * Node.js
      * Express.js
    * Jquery.js
-     * Socket.io
+   * Socket.io
    * D3.js
 4. RubyonRails
    * Rails4
