@@ -22,8 +22,11 @@ a websocket and a data visualization library that should work very well together
    * Rails4
 5. PostgresSql
 
+PS. This is a github link for another Node.js Server
+[GitHub](https://github.com/Ratimon/node-server-stock-visualization)
+
 == Data Source
-Yahoo Finance API and its gem
+Yahoo Finance API
 
 == Requirement
 1. Authentication
